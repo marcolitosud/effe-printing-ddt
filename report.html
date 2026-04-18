@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Report - Studio Pizzone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1410">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="Pizzone">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#1a1410;--terra:#c9a76f;--terra-dim:#8c744d;--ivory:#fbf8f0;--ivory-dim:rgba(251,248,240,0.6);--green:#7fb069;--yellow:#e6b34a;--red:#d4675b;--blue:#6ba3d4;--card:rgba(255,255,255,0.03);--border:rgba(201,167,111,0.15);--border-strong:rgba(201,167,111,0.35)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ivory);font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+body{background-image:linear-gradient(rgba(201,167,111,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,167,111,0.025) 1px,transparent 1px);background-size:64px 64px}
+.container{max-width:1280px;margin:0 auto;padding:24px 20px 120px}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--ivory-dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:8px 0}
+.back-link:hover{color:var(--terra)}
+header.topbar{margin:16px 0 32px;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400}
+.page-title em{font-style:italic;color:var(--terra)}
+.page-subtitle{color:var(--ivory-dim);font-size:14px;margin-top:4px}
+.refresh-btn{background:transparent;border:1px solid var(--border-strong);color:var(--ivory);padding:10px 16px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s}
+.refresh-btn:hover{border-color:var(--terra);color:var(--terra)}
+
+/* SEZIONI */
+.section{margin-bottom:40px}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-style:italic;color:var(--terra);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:'';height:1px;background:var(--terra);flex:0 0 24px}
+.section-title::after{content:'';height:1px;background:var(--border);flex:1}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:22px 20px;position:relative;overflow:hidden;transition:all .2s;text-decoration:none;color:var(--ivory)}
+.kpi:hover{border-color:var(--border-strong);transform:translateY(-1px)}
+.kpi .value{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:500;color:var(--terra);line-height:1;margin-bottom:6px}
+.kpi.urgent .value{color:var(--red)}
+.kpi.warn .value{color:var(--yellow)}
+.kpi .label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--ivory-dim);text-transform:uppercase}
+.kpi .sublabel{font-size:12px;color:var(--ivory-dim);margin-top:4px;opacity:.8}
+.kpi .icon{position:absolute;top:-8px;right:-8px;font-size:64px;opacity:.06}
+
+/* LISTE */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
+.panel h3{font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:16px;font-style:italic;color:var(--terra)}
+.panel-empty{color:var(--ivory-dim);font-size:13px;font-style:italic;text-align:center;padding:24px 0}
+
+/* list rows */
+.row{display:flex;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--border);text-decoration:none;color:var(--ivory);transition:all .2s}
+.row:first-child{border-top:none}
+.row:hover{color:var(--terra)}
+.row .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.row .dot.green{background:var(--green)}
+.row .dot.yellow{background:var(--yellow)}
+.row .dot.red{background:var(--red)}
+.row .dot.gray{background:var(--ivory-dim)}
+.row .dot.blue{background:var(--blue)}
+.row .main{flex:1;min-width:0}
+.row .main .nome{font-size:14px;font-weight:400;word-wrap:break-word}
+.row .main .meta{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ivory-dim);letter-spacing:.5px;margin-top:2px}
+.row .right{text-align:right;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ivory-dim);flex-shrink:0}
+
+/* distribuzione stati (a barre) */
+.dist{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.dist-row{display:flex;align-items:center;gap:12px}
+.dist-row .l{width:100px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--ivory-dim)}
+.dist-row .bar-wrap{flex:1;height:22px;background:rgba(0,0,0,.25);border-radius:11px;overflow:hidden;position:relative}
+.dist-row .bar{height:100%;transition:width .6s cubic-bezier(.2,.8,.2,1);border-radius:11px}
+.dist-row .bar.attivo{background:linear-gradient(90deg,var(--green),#9fc789)}
+.dist-row .bar.pausa{background:linear-gradient(90deg,var(--yellow),#eec472)}
+.dist-row .bar.chiuso{background:linear-gradient(90deg,var(--ivory-dim),#bfb9ad)}
+.dist-row .bar.preventivo{background:linear-gradient(90deg,var(--blue),#91bed8)}
+.dist-row .n{width:44px;text-align:right;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--ivory)}
+
+/* timeline scadenze */
+.timeline{display:flex;flex-direction:column;gap:8px}
+.tl-item{display:grid;grid-template-columns:80px 1fr auto;gap:14px;align-items:center;padding:12px 14px;background:rgba(0,0,0,.15);border:1px solid var(--border);border-left-width:3px;border-radius:8px;transition:all .2s;text-decoration:none;color:var(--ivory)}
+.tl-item:hover{border-color:var(--border-strong)}
+.tl-item.red{border-left-color:var(--red)}
+.tl-item.yellow{border-left-color:var(--yellow)}
+.tl-item.green{border-left-color:var(--green)}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ivory-dim);letter-spacing:.5px}
+.tl-date .dd{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--ivory);font-weight:500;line-height:1}
+.tl-date .mm{font-size:10px;letter-spacing:1px;text-transform:uppercase}
+.tl-main{min-width:0}
+.tl-main .titolo{font-size:14px}
+.tl-main .sub{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ivory-dim);letter-spacing:.5px;margin-top:2px}
+.tl-tag{padding:3px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0}
+.tl-tag.red{background:rgba(212,103,91,.15);color:var(--red)}
+.tl-tag.yellow{background:rgba(230,179,74,.15);color:var(--yellow)}
+.tl-tag.green{background:rgba(127,176,105,.15);color:var(--green)}
+
+/* feed attività */
+.feed{display:flex;flex-direction:column;gap:2px}
+.feed-item{display:flex;gap:14px;padding:10px 0;border-top:1px solid var(--border)}
+.feed-item:first-child{border-top:none}
+.feed-item .ev-icon{width:32px;height:32px;border-radius:50%;background:rgba(201,167,111,.1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.feed-item .content{flex:1;min-width:0}
+.feed-item .content .title{font-size:13px}
+.feed-item .content .meta{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5px;color:var(--ivory-dim);margin-top:2px}
+
+.loader{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loader.show{display:flex}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--terra);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:700px){
+  .container{padding:16px 14px 100px}
+  .page-title{font-size:28px}
+  .two-col{grid-template-columns:1fr}
+  .kpi .value{font-size:40px}
+  .tl-item{grid-template-columns:62px 1fr;gap:10px}
+  .tl-tag{grid-column:1/-1;justify-self:start}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">← Torna al portale</a>
+
+  <header class="topbar">
+    <div>
+      <h1 class="page-title">Report <em>operativo</em></h1>
+      <p class="page-subtitle" id="asofLabel">—</p>
+    </div>
+    <button class="refresh-btn" onclick="load()">⟳ Aggiorna</button>
+  </header>
+
+  <!-- KPI -->
+  <div class="section">
+    <div class="kpi-grid" id="kpiGrid"></div>
+  </div>
+
+  <!-- CANTIERI PER STATO -->
+  <div class="section">
+    <h2 class="section-title">Cantieri per stato</h2>
+    <div class="panel">
+      <div class="dist" id="distCantieri"></div>
+    </div>
+  </div>
+
+  <!-- SCADENZE & SOPRALLUOGHI -->
+  <div class="section two-col">
+    <div class="panel">
+      <h3>Prossime scadenze · 30 giorni</h3>
+      <div class="timeline" id="timeline"></div>
+    </div>
+    <div class="panel">
+      <h3>Sopralluoghi recenti</h3>
+      <div id="sopralluoghiList"></div>
+    </div>
+  </div>
+
+  <!-- ATTIVITÀ -->
+  <div class="section">
+    <h2 class="section-title">Attività recente</h2>
+    <div class="panel">
+      <div class="feed" id="feed"></div>
+    </div>
+  </div>
+</div>
+
+
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--ivory-dim)">CARICAMENTO…</div>
+</div>
+
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SUPABASE_URL = 'https://dlswafwbliqabozeuapv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FpMAG0z69Exc9KQZp4m3Qw_JhYlqIC0';
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+const showLoader = () => $('loader').classList.add('show');
+const hideLoader = () => $('loader').classList.remove('show');
+const escape = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MESI = ['GEN','FEB','MAR','APR','MAG','GIU','LUG','AGO','SET','OTT','NOV','DIC'];
+
+function daysBetween(a, b) {
+  return Math.floor((a - b) / 86400000);
+}
+
+window.load = async function load() {
+  showLoader();
+  try {
+    const oggi = new Date(); oggi.setHours(0,0,0,0);
+    const in30 = new Date(oggi.getTime() + 30*86400000);
+    const primoMese = new Date(oggi.getFullYear(), oggi.getMonth(), 1);
+
+    // parallel
+    const [
+      {data: cantieri},
+      {data: eventi},
+      {data: sopralluoghi},
+      {data: fornitori},
+      {data: clienti}
+    ] = await Promise.all([
+      sb.from('cantieri').select('*'),
+      sb.from('eventi').select('*').gte('data_evento', oggi.toISOString().slice(0,10)).lte('data_evento', in30.toISOString().slice(0,10)).order('data_evento'),
+      sb.from('sopralluoghi').select('*, cantieri(nome)').order('data_sopralluogo', {ascending:false}),
+      sb.from('fornitori_stats').select('n_cantieri'),
+      sb.from('clienti').select('id')
+    ]);
+
+    // ===== KPI =====
+    const arr = cantieri || [];
+    const attivi = arr.filter(c => (c.stato||'').toLowerCase() === 'attivo').length;
+    const inPausa = arr.filter(c => (c.stato||'').toLowerCase() === 'pausa').length;
+    const chiusi  = arr.filter(c => (c.stato||'').toLowerCase() === 'chiuso').length;
+    const preventivo = arr.filter(c => (c.stato||'').toLowerCase() === 'preventivo').length;
+
+    const prossimiEventi = (eventi||[]).length;
+    const sopralluoghiMese = (sopralluoghi||[]).filter(s => {
+      if (!s.data_sopralluogo) return false;
+      return new Date(s.data_sopralluogo) >= primoMese;
+    }).length;
+    const fornitoriInLavoro = (fornitori||[]).filter(f => (f.n_cantieri||0) > 0).length;
+
+    // KPI grid
+    const kpis = [
+      {label:'Cantieri attivi',   value:attivi,           sub:'in corso', icon:'🏗', href:'cantieri.html'},
+      {label:'Scadenze 30gg',     value:prossimiEventi,   sub:'prossime', icon:'📅', href:'scadenze.html', cls: prossimiEventi > 0 ? 'warn':''},
+      {label:'Sopralluoghi mese', value:sopralluoghiMese, sub:MESI[oggi.getMonth()], icon:'🔍', href:'sopralluoghi.html'},
+      {label:'Fornitori in lavoro', value:fornitoriInLavoro, sub:`su ${(fornitori||[]).length} tot.`, icon:'🔧', href:'fornitori.html'},
+    ];
+    $('kpiGrid').innerHTML = kpis.map(k => `
+      <a href="${k.href}" class="kpi ${k.cls||''}">
+        <div class="icon">${k.icon}</div>
+        <div class="value">${k.value}</div>
+        <div class="label">${escape(k.label)}</div>
+        <div class="sublabel">${escape(k.sub)}</div>
+      </a>
+    `).join('');
+
+    // ===== DISTRIBUZIONE CANTIERI =====
+    const tot = arr.length;
+    const stati = [
+      {l:'Attivi',    n:attivi,     c:'attivo'},
+      {l:'In pausa',  n:inPausa,    c:'pausa'},
+      {l:'Preventivo',n:preventivo, c:'preventivo'},
+      {l:'Chiusi',    n:chiusi,     c:'chiuso'},
+    ];
+    $('distCantieri').innerHTML = stati.map(s => {
+      const pct = tot > 0 ? (s.n / tot * 100).toFixed(0) : 0;
+      return `
+        <div class="dist-row">
+          <div class="l">${escape(s.l)}</div>
+          <div class="bar-wrap"><div class="bar ${s.c}" style="width:${pct}%"></div></div>
+          <div class="n">${s.n}</div>
+        </div>`;
+    }).join('') || '<div class="panel-empty">Nessun cantiere</div>';
+
+    // ===== TIMELINE SCADENZE =====
+    const evArr = eventi || [];
+    if (evArr.length === 0) {
+      $('timeline').innerHTML = '<div class="panel-empty">Nessuna scadenza nei prossimi 30 giorni 🎉</div>';
+    } else {
+      const cantieriMap = new Map((cantieri||[]).map(c => [c.id, c]));
+      $('timeline').innerHTML = evArr.slice(0, 8).map(ev => {
+        const dt = new Date(ev.data_evento);
+        const diff = daysBetween(dt, oggi);
+        let colorCls = 'green', tag = `Fra ${diff}gg`;
+        if (diff < 0) { colorCls = 'red'; tag = `${Math.abs(diff)}gg fa`; }
+        else if (diff === 0) { colorCls = 'red'; tag = 'Oggi'; }
+        else if (diff <= 7) { colorCls = 'yellow'; tag = `Fra ${diff}gg`; }
+        const cant = cantieriMap.get(ev.cantiere_id);
+        return `
+          <a class="tl-item ${colorCls}" href="cantiere-dettaglio.html?id=${ev.cantiere_id||''}">
+            <div class="tl-date">
+              <div class="dd">${dt.getDate().toString().padStart(2,'0')}</div>
+              <div class="mm">${MESI[dt.getMonth()]}</div>
+            </div>
+            <div class="tl-main">
+              <div class="titolo">${escape(ev.titolo || 'Evento')}</div>
+              <div class="sub">${cant ? escape(cant.nome) : ''}${ev.tipo ? ' · ' + escape(ev.tipo) : ''}</div>
+            </div>
+            <div class="tl-tag ${colorCls}">${escape(tag)}</div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    // ===== SOPRALLUOGHI =====
+    const sopArr = (sopralluoghi||[]).slice(0, 6);
+    if (sopArr.length === 0) {
+      $('sopralluoghiList').innerHTML = '<div class="panel-empty">Nessun sopralluogo ancora</div>';
+    } else {
+      $('sopralluoghiList').innerHTML = sopArr.map(s => {
+        const dt = s.data_sopralluogo ? new Date(s.data_sopralluogo).toLocaleDateString('it-IT', {day:'2-digit', month:'short'}) : '—';
+        return `
+          <a class="row" href="sopralluogo-dettaglio.html?id=${s.id}">
+            <div class="dot blue"></div>
+            <div class="main">
+              <div class="nome">${escape(s.cantieri?.nome || 'Cantiere')}</div>
+              <div class="meta">${escape(s.titolo || 'Sopralluogo')}</div>
+            </div>
+            <div class="right">${dt}</div>
+          </a>`;
+      }).join('');
+    }
+
+    // ===== FEED ATTIVITÀ =====
+    // derivato da created_at delle varie tabelle
+    const [
+      {data: recentiCant},
+      {data: recentiCli},
+      {data: recentiForn},
+      {data: recentiSop}
+    ] = await Promise.all([
+      sb.from('cantieri').select('id, nome, created_at').order('created_at', {ascending:false}).limit(5),
+      sb.from('clienti_stats').select('id, nome_display, created_at').order('created_at', {ascending:false}).limit(5),
+      sb.from('fornitori_stats').select('id, nome_display, mansione, created_at').order('created_at', {ascending:false}).limit(5),
+      sb.from('sopralluoghi').select('id, titolo, data_sopralluogo, created_at, cantieri(nome)').order('created_at', {ascending:false}).limit(5),
+    ]);
+
+    const events = [];
+    (recentiCant||[]).forEach(r => events.push({ts:new Date(r.created_at), icon:'🏗', text:`Cantiere aggiunto: <strong>${escape(r.nome||'—')}</strong>`, href:`cantiere-dettaglio.html?id=${r.id}`}));
+    (recentiCli||[]).forEach(r => events.push({ts:new Date(r.created_at), icon:'👥', text:`Cliente aggiunto: <strong>${escape(r.nome_display||'—')}</strong>`, href:`cliente-dettaglio.html?id=${r.id}`}));
+    (recentiForn||[]).forEach(r => events.push({ts:new Date(r.created_at), icon:'🔧', text:`Fornitore aggiunto: <strong>${escape(r.nome_display||'—')}</strong>${r.mansione?' — '+escape(r.mansione):''}`, href:`fornitore-dettaglio.html?id=${r.id}`}));
+    (recentiSop||[]).forEach(r => events.push({ts:new Date(r.created_at), icon:'🔍', text:`Sopralluogo: <strong>${escape(r.cantieri?.nome||'—')}</strong>`, href:`sopralluogo-dettaglio.html?id=${r.id}`}));
+
+    events.sort((a,b) => b.ts - a.ts);
+    const topEvents = events.slice(0, 12);
+
+    if (topEvents.length === 0) {
+      $('feed').innerHTML = '<div class="panel-empty">Nessuna attività recente</div>';
+    } else {
+      $('feed').innerHTML = topEvents.map(e => {
+        const diff = daysBetween(oggi, new Date(e.ts.getFullYear(), e.ts.getMonth(), e.ts.getDate()));
+        let when;
+        if (diff === 0) when = 'Oggi';
+        else if (diff === 1) when = 'Ieri';
+        else if (diff < 7) when = `${diff} giorni fa`;
+        else when = e.ts.toLocaleDateString('it-IT', {day:'2-digit', month:'short'});
+        const hh = e.ts.toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+        return `
+          <a class="feed-item" href="${e.href}" style="text-decoration:none;color:inherit">
+            <div class="ev-icon">${e.icon}</div>
+            <div class="content">
+              <div class="title">${e.text}</div>
+              <div class="meta">${when} · ${hh}</div>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    // as of
+    const hhmm = new Date().toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+    $('asofLabel').textContent = `Aggiornato alle ${hhmm} · ${(clienti||[]).length} clienti · ${(fornitori||[]).length} fornitori · ${arr.length} cantieri`;
+
+  } catch (e) {
+    console.error(e);
+    alert('Errore: ' + (e.message || e));
+  } finally { hideLoader(); }
+};
+
+load();
+</script>
+</body>
+</html>

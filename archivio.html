@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Archivio - Studio Pizzone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1410">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="Pizzone">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#1a1410;--terra:#c9a76f;--terra-dim:#8c744d;--ivory:#fbf8f0;--ivory-dim:rgba(251,248,240,0.6);--green:#7fb069;--yellow:#e6b34a;--red:#d4675b;--blue:#6ba3d4;--card:rgba(255,255,255,0.03);--border:rgba(201,167,111,0.15);--border-strong:rgba(201,167,111,0.35)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ivory);font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+body{background-image:linear-gradient(rgba(201,167,111,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,167,111,0.025) 1px,transparent 1px);background-size:64px 64px}
+.container{max-width:1200px;margin:0 auto;padding:24px 20px 120px}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--ivory-dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:8px 0}
+.back-link:hover{color:var(--terra)}
+header.topbar{margin:16px 0 32px}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400}
+.page-title em{font-style:italic;color:var(--terra)}
+.page-subtitle{color:var(--ivory-dim);font-size:14px;margin-top:4px}
+
+.toolbar{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--ivory);padding:12px 16px 12px 42px;border-radius:8px;font-size:14px}
+.search-wrap input:focus{outline:none;border-color:var(--terra)}
+.search-wrap::before{content:'';position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a76f' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;opacity:.7}
+.cliente-filter{min-width:220px;background:var(--card);border:1px solid var(--border);color:var(--ivory);padding:12px 14px;border-radius:8px;font-size:14px;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a76f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-size:16px;background-position:right 12px center;background-repeat:no-repeat;padding-right:40px}
+
+.cantieri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.cantiere-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;cursor:pointer;transition:all .2s;text-decoration:none;color:var(--ivory);display:flex;flex-direction:column;gap:14px;min-height:180px}
+.cantiere-card:hover{border-color:var(--border-strong);transform:translateY(-2px)}
+.cc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.cc-nome{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;line-height:1.2}
+.cc-meta{font-size:12px;color:var(--ivory-dim);font-family:'JetBrains Mono',monospace;letter-spacing:.5px;margin-top:4px}
+.cc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:auto;padding-top:12px;border-top:1px solid var(--border)}
+.cc-stat{text-align:center;padding:6px 4px;border-radius:8px;background:rgba(0,0,0,.2)}
+.cc-stat .n{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;line-height:1}
+.cc-stat .l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--ivory-dim);text-transform:uppercase;margin-top:4px}
+.cc-stat.render .n{color:var(--blue)}
+.cc-stat.progetti .n{color:var(--yellow)}
+.cc-stat.foto .n{color:var(--green)}
+
+.chip-stato{padding:3px 8px;border-radius:10px;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase;flex-shrink:0}
+.chip-stato.attivo{background:rgba(127,176,105,.15);color:var(--green)}
+.chip-stato.pausa{background:rgba(230,179,74,.15);color:var(--yellow)}
+.chip-stato.chiuso,.chip-stato.archiviato{background:rgba(251,248,240,.08);color:var(--ivory-dim)}
+
+.empty-state{text-align:center;padding:80px 20px;color:var(--ivory-dim)}
+.empty-state .big{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;margin-bottom:12px;color:var(--terra-dim)}
+
+.loader{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loader.show{display:flex}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--terra);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:600px){
+  .container{padding:16px 14px 100px}
+  .page-title{font-size:28px}
+  .cantieri-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">← Torna al portale</a>
+
+  <header class="topbar">
+    <h1 class="page-title">Archivio <em>grafico</em></h1>
+    <p class="page-subtitle" id="countLabel">Caricamento…</p>
+  </header>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Cerca cantiere, indirizzo…" oninput="renderList()">
+    </div>
+    <select class="cliente-filter" id="clienteFilter" onchange="renderList()">
+      <option value="">Tutti i clienti</option>
+    </select>
+  </div>
+
+  <div id="listContainer"></div>
+</div>
+
+
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--ivory-dim)">CARICAMENTO…</div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SUPABASE_URL = 'https://dlswafwbliqabozeuapv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FpMAG0z69Exc9KQZp4m3Qw_JhYlqIC0';
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+const showLoader = () => $('loader').classList.add('show');
+const hideLoader = () => $('loader').classList.remove('show');
+const escape = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+let allCantieri = [];
+let clientiMap = new Map();
+
+async function load() {
+  showLoader();
+  try {
+    const [{data: st}, {data: cli}] = await Promise.all([
+      sb.from('cantieri_archivio_stats').select('*').order('ultima_modifica', {ascending:false, nullsFirst:false}),
+      sb.from('clienti_stats').select('id, nome_display, tipo')
+    ]);
+    allCantieri = st || [];
+    (cli||[]).forEach(c => clientiMap.set(c.id, c));
+    renderClienteFilter(cli || []);
+    renderList();
+  } catch (e) {
+    console.error(e);
+    $('listContainer').innerHTML = `<div class="empty-state"><div class="big">Errore</div><div>${e.message||e}</div></div>`;
+  } finally { hideLoader(); }
+}
+
+function renderClienteFilter(clienti) {
+  const sel = $('clienteFilter');
+  const sorted = [...clienti].sort((a,b) => (a.nome_display||'').localeCompare(b.nome_display||''));
+  sel.innerHTML = '<option value="">Tutti i clienti</option>'
+    + sorted.map(c => `<option value="${c.id}">${escape(c.nome_display || '—')}</option>`).join('');
+}
+
+function renderList() {
+  const search = $('searchInput').value.trim().toLowerCase();
+  const clienteId = $('clienteFilter').value;
+  let items = allCantieri.filter(c => {
+    if (clienteId && c.cliente_id !== clienteId) return false;
+    if (!search) return true;
+    return (c.cantiere_nome||'').toLowerCase().includes(search) 
+        || (c.indirizzo||'').toLowerCase().includes(search);
+  });
+
+  $('countLabel').textContent = items.length === 1 ? '1 cantiere' : `${items.length} cantieri`;
+
+  if (items.length === 0) {
+    $('listContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="big">${search||clienteId ? 'Nessun risultato' : 'Nessun cantiere ancora'}</div>
+        <div>${search||clienteId ? 'Prova a cambiare ricerca o filtro' : 'Crea un cantiere per iniziare a caricare materiale grafico'}</div>
+      </div>`;
+    return;
+  }
+
+  const html = items.map(c => {
+    const cliente = clientiMap.get(c.cliente_id);
+    const clienteNome = cliente ? cliente.nome_display : null;
+    const stato = (c.stato || 'attivo').toLowerCase();
+    return `
+      <a href="archivio-cantiere.html?cantiereId=${c.cantiere_id}" class="cantiere-card">
+        <div class="cc-head">
+          <div style="flex:1;min-width:0">
+            <div class="cc-nome">${escape(c.cantiere_nome || 'Senza nome')}</div>
+            <div class="cc-meta">
+              ${clienteNome ? escape(clienteNome) : '<em style="color:var(--terra-dim)">Nessun cliente</em>'}
+              ${c.indirizzo ? ` · ${escape(c.indirizzo)}` : ''}
+            </div>
+          </div>
+          <span class="chip-stato ${stato}">${escape(stato)}</span>
+        </div>
+        <div class="cc-stats">
+          <div class="cc-stat render">
+            <div class="n">${c.n_render||0}</div>
+            <div class="l">Render</div>
+          </div>
+          <div class="cc-stat progetti">
+            <div class="n">${c.n_progetti||0}</div>
+            <div class="l">Progetti</div>
+          </div>
+          <div class="cc-stat foto">
+            <div class="n">${c.n_foto||0}</div>
+            <div class="l">Foto</div>
+          </div>
+        </div>
+      </a>`;
+  }).join('');
+  $('listContainer').innerHTML = `<div class="cantieri-grid">${html}</div>`;
+}
+
+window.renderList = renderList;
+load();
+</script>
+</body>
+</html>

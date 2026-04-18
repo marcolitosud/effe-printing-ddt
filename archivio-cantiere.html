@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Archivio cantiere - Studio Pizzone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1410">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="Pizzone">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#1a1410;--terra:#c9a76f;--terra-dim:#8c744d;--ivory:#fbf8f0;--ivory-dim:rgba(251,248,240,0.6);--green:#7fb069;--yellow:#e6b34a;--red:#d4675b;--blue:#6ba3d4;--card:rgba(255,255,255,0.03);--border:rgba(201,167,111,0.15);--border-strong:rgba(201,167,111,0.35)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ivory);font-family:'Inter',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+body{background-image:linear-gradient(rgba(201,167,111,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(201,167,111,0.025) 1px,transparent 1px);background-size:64px 64px}
+.container{max-width:1400px;margin:0 auto;padding:24px 20px 120px}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--ivory-dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:8px 0}
+.back-link:hover{color:var(--terra)}
+
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:16px 0 24px;flex-wrap:wrap}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400}
+.page-title em{font-style:italic;color:var(--terra)}
+.page-subtitle{color:var(--ivory-dim);font-size:14px;margin-top:4px}
+
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.chip{padding:10px 18px;border:1px solid var(--border);border-radius:22px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;cursor:pointer;transition:all .2s;background:transparent;color:var(--ivory-dim);display:inline-flex;align-items:center;gap:8px}
+.chip:hover{border-color:var(--border-strong);color:var(--ivory)}
+.chip.active{background:var(--terra);border-color:var(--terra);color:var(--bg);font-weight:500}
+.chip .num{background:rgba(0,0,0,.2);padding:2px 7px;border-radius:10px;font-size:10px}
+.chip.active .num{background:rgba(255,255,255,.2);color:var(--bg)}
+
+.btn{border:none;padding:12px 20px;border-radius:8px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+.btn-primary{background:var(--terra);color:var(--bg);font-weight:500}
+.btn-primary:hover{background:var(--ivory)}
+.btn-ghost{background:transparent;border:1px solid var(--border-strong);color:var(--ivory)}
+.btn-ghost:hover{border-color:var(--terra);color:var(--terra)}
+.btn-sm{padding:6px 12px;font-size:10px}
+
+.upload-zone{border:2px dashed var(--border-strong);border-radius:16px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:24px;background:rgba(201,167,111,0.03)}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--terra);background:rgba(201,167,111,0.08)}
+.upload-zone .icon{font-size:36px;color:var(--terra);margin-bottom:10px}
+.upload-zone .title{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic}
+.upload-zone .desc{color:var(--ivory-dim);font-size:13px;margin-top:8px}
+.upload-zone .categoria{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;color:var(--terra)}
+
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.gal-item{position:relative;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;aspect-ratio:1;cursor:pointer;transition:all .2s}
+.gal-item:hover{border-color:var(--border-strong);transform:scale(1.02)}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-item .pdf-icon{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(201,167,111,0.1);gap:8px}
+.gal-item .pdf-icon .big{font-size:42px;color:var(--terra)}
+.gal-item .pdf-icon .name{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ivory-dim);padding:0 10px;text-align:center;word-break:break-word}
+.gal-item .cat-badge{position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.5px;text-transform:uppercase;backdrop-filter:blur(8px);background:rgba(0,0,0,.55);color:var(--ivory);border:1px solid rgba(255,255,255,.15)}
+.gal-item .actions{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity .2s}
+.gal-item:hover .actions{opacity:1}
+.gal-item .act-btn{width:28px;height:28px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:var(--ivory);cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);font-size:14px}
+.gal-item .act-btn:hover{background:var(--terra);color:var(--bg)}
+.gal-item .act-btn.danger:hover{background:var(--red);color:var(--ivory)}
+.gal-item .info{position:absolute;bottom:0;left:0;right:0;padding:8px 10px;background:linear-gradient(transparent,rgba(0,0,0,.75));opacity:0;transition:opacity .2s}
+.gal-item:hover .info{opacity:1}
+.gal-item .info .titolo{font-size:12px;color:var(--ivory)}
+.gal-item .info .data{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--ivory-dim);letter-spacing:.5px}
+
+.empty-gallery{text-align:center;padding:80px 20px;color:var(--ivory-dim);border:1px dashed var(--border);border-radius:16px}
+.empty-gallery .big{font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;color:var(--terra-dim);margin-bottom:10px}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;display:none;align-items:center;justify-content:center;padding:20px}
+.lightbox.show{display:flex}
+.lb-img{max-width:100%;max-height:85vh;object-fit:contain}
+.lb-pdf{width:100%;height:85vh;border:none;background:#fff;border-radius:8px}
+.lb-close{position:absolute;top:20px;right:20px;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--ivory);cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.lb-close:hover{background:var(--terra);color:var(--bg)}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--ivory);cursor:pointer;font-size:26px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.lb-nav:hover{background:var(--terra);color:var(--bg)}
+.lb-prev{left:20px}
+.lb-next{right:20px}
+.lb-info{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.7);backdrop-filter:blur(8px);padding:10px 20px;border-radius:10px;border:1px solid rgba(255,255,255,.1);max-width:90%;text-align:center}
+.lb-info .titolo{font-size:14px;color:var(--ivory);margin-bottom:4px}
+.lb-info .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ivory-dim);letter-spacing:.5px}
+.lb-dl{position:absolute;top:20px;right:80px;padding:10px 16px;border-radius:24px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:var(--ivory);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-decoration:none;backdrop-filter:blur(8px)}
+.lb-dl:hover{background:var(--terra);color:var(--bg)}
+
+.loader{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:600;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loader.show{display:flex}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--terra);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--ivory-dim)}
+
+@media(max-width:600px){
+  .container{padding:16px 14px 100px}
+  .page-title{font-size:28px}
+  .gallery{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+  .gal-item .actions{opacity:1}
+  .gal-item .info{opacity:1}
+  .lb-nav{width:46px;height:46px;font-size:22px}
+  .lb-prev{left:10px}
+  .lb-next{right:10px}
+  .lb-dl{right:74px;padding:8px 12px;font-size:10px}
+  .lb-close{width:42px;height:42px;font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="archivio.html" class="back-link">← Tutti gli archivi</a>
+
+  <div class="head">
+    <div>
+      <h1 class="page-title" id="cantiereNome">Caricamento…</h1>
+      <p class="page-subtitle" id="cantiereSub"></p>
+    </div>
+    <a id="apriCantiere" href="#" class="btn btn-ghost">↗ Apri scheda cantiere</a>
+  </div>
+
+  <div class="filters">
+    <button class="chip active" data-cat="tutti" onclick="setCat('tutti')">Tutti <span class="num" id="nTutti">0</span></button>
+    <button class="chip" data-cat="render"   onclick="setCat('render')">Render <span class="num" id="nRender">0</span></button>
+    <button class="chip" data-cat="progetti" onclick="setCat('progetti')">Progetti <span class="num" id="nProgetti">0</span></button>
+    <button class="chip" data-cat="foto"     onclick="setCat('foto')">Foto <span class="num" id="nFoto">0</span></button>
+  </div>
+
+  <!-- zona upload (cambia categoria attiva) -->
+  <div class="upload-zone" id="uploadZone">
+    <input type="file" id="fileInput" accept="image/*,application/pdf" multiple style="display:none" onchange="handleFiles(event.target.files)">
+    <div class="icon">⇪</div>
+    <div class="title">Trascina qui o <span style="color:var(--terra);text-decoration:underline">scegli file</span></div>
+    <div class="desc">Foto (JPG, PNG, WebP), render o piantine (PDF)</div>
+    <div class="categoria" id="uploadCat">Caricherò in: <strong>—</strong></div>
+  </div>
+
+  <div id="galleryContainer"></div>
+</div>
+
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Chiudi">✕</button>
+  <a class="lb-dl" id="lbDownload" href="#" download target="_blank">↓ Scarica</a>
+  <button class="lb-nav lb-prev" onclick="navLightbox(-1)" aria-label="Precedente">‹</button>
+  <button class="lb-nav lb-next" onclick="navLightbox(1)" aria-label="Successivo">›</button>
+  <div id="lbContent"></div>
+  <div class="lb-info">
+    <div class="titolo" id="lbTitolo"></div>
+    <div class="meta" id="lbMeta"></div>
+  </div>
+</div>
+
+
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+  <div class="loader-text" id="loaderText">CARICAMENTO…</div>
+</div>
+
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+const SUPABASE_URL = 'https://dlswafwbliqabozeuapv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FpMAG0z69Exc9KQZp4m3Qw_JhYlqIC0';
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+const showLoader = (t='CARICAMENTO…') => { $('loaderText').textContent = t; $('loader').classList.add('show'); };
+const hideLoader = () => $('loader').classList.remove('show');
+const escape = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const storageUrl = (bucket, path) => `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${path}`;
+
+const url = new URL(location.href);
+const cantiereId = url.searchParams.get('cantiereId');
+if (!cantiereId) location.href = 'archivio.html';
+
+let cantiere = null;
+let clienteNome = null;
+let items = [];
+let currentCat = 'tutti';
+// lightbox
+let lbVisible = [];
+let lbIndex = 0;
+
+async function load() {
+  showLoader();
+  try {
+    const { data: c, error: e1 } = await sb.from('cantieri').select('*').eq('id', cantiereId).single();
+    if (e1) throw e1;
+    cantiere = c;
+
+    if (c.cliente_id) {
+      const { data: cli } = await sb.from('clienti_stats').select('nome_display').eq('id', c.cliente_id).maybeSingle();
+      clienteNome = cli?.nome_display || null;
+    }
+
+    const { data: arc, error: e2 } = await sb
+      .from('cantieri_archivio').select('*')
+      .eq('cantiere_id', cantiereId)
+      .order('created_at', { ascending: false });
+    if (e2) throw e2;
+    items = arc || [];
+
+    renderHead();
+    renderCounts();
+    renderGallery();
+  } catch (e) {
+    alert('Errore: ' + (e.message || e));
+    console.error(e);
+  } finally { hideLoader(); }
+}
+
+function renderHead() {
+  $('cantiereNome').innerHTML = `${escape(cantiere.nome || 'Cantiere')} <em>archivio</em>`;
+  const subParts = [];
+  if (clienteNome) subParts.push(clienteNome);
+  if (cantiere.indirizzo) subParts.push(cantiere.indirizzo);
+  $('cantiereSub').textContent = subParts.join(' · ') || '—';
+  $('apriCantiere').href = `cantiere-dettaglio.html?id=${cantiereId}`;
+  document.title = (cantiere.nome || 'Cantiere') + ' · Archivio - Studio Pizzone';
+}
+
+function renderCounts() {
+  $('nTutti').textContent = items.length;
+  $('nRender').textContent = items.filter(i => i.categoria === 'render').length;
+  $('nProgetti').textContent = items.filter(i => i.categoria === 'progetti').length;
+  $('nFoto').textContent = items.filter(i => i.categoria === 'foto').length;
+}
+
+window.setCat = cat => {
+  currentCat = cat;
+  document.querySelectorAll('.chip').forEach(ch => ch.classList.toggle('active', ch.dataset.cat === cat));
+  renderGallery();
+  refreshUploadCat();
+};
+
+function refreshUploadCat() {
+  const label = currentCat === 'tutti' ? 'seleziona una categoria per caricare' : currentCat;
+  $('uploadCat').innerHTML = `Caricherò in: <strong>${escape(label)}</strong>`;
+  $('uploadZone').style.opacity = currentCat === 'tutti' ? '.55' : '1';
+  $('uploadZone').style.pointerEvents = currentCat === 'tutti' ? 'none' : 'auto';
+}
+refreshUploadCat();
+
+function renderGallery() {
+  const filtered = currentCat === 'tutti' ? items : items.filter(i => i.categoria === currentCat);
+
+  if (filtered.length === 0) {
+    $('galleryContainer').innerHTML = `
+      <div class="empty-gallery">
+        <div class="big">${currentCat === 'tutti' ? 'Nessun file ancora' : `Nessun file in "${currentCat}"`}</div>
+        <div>${currentCat === 'tutti' ? 'Seleziona una categoria e carica i tuoi file' : 'Trascina qui file o clicca la zona sopra'}</div>
+      </div>`;
+    return;
+  }
+
+  lbVisible = filtered;
+
+  const html = filtered.map((it, idx) => {
+    const u = storageUrl('cantieri-archivio', it.file_path);
+    const isImg = (it.tipo_mime || '').startsWith('image/');
+    const preview = isImg 
+      ? `<img src="${u}" alt="" loading="lazy">` 
+      : `<div class="pdf-icon"><div class="big">📄</div><div class="name">${escape(it.titolo || it.file_path.split('/').pop())}</div></div>`;
+    return `
+      <div class="gal-item" data-idx="${idx}" onclick="openLightbox(${idx})">
+        ${preview}
+        <div class="cat-badge">${escape(it.categoria)}</div>
+        <div class="actions">
+          <button class="act-btn danger" onclick="event.stopPropagation(); deleteItem('${it.id}')" title="Elimina">🗑</button>
+        </div>
+        ${it.titolo ? `<div class="info"><div class="titolo">${escape(it.titolo)}</div></div>` : ''}
+      </div>
+    `;
+  }).join('');
+  $('galleryContainer').innerHTML = `<div class="gallery">${html}</div>`;
+}
+
+/* UPLOAD */
+const uz = $('uploadZone');
+uz.addEventListener('click', () => {
+  if (currentCat === 'tutti') { alert('Seleziona prima una categoria (Render, Progetti o Foto).'); return; }
+  $('fileInput').click();
+});
+uz.addEventListener('dragover', e => { e.preventDefault(); if (currentCat !== 'tutti') uz.classList.add('drag'); });
+uz.addEventListener('dragleave', () => uz.classList.remove('drag'));
+uz.addEventListener('drop', e => {
+  e.preventDefault();
+  uz.classList.remove('drag');
+  if (currentCat === 'tutti') { alert('Seleziona prima una categoria.'); return; }
+  handleFiles(e.dataTransfer.files);
+});
+
+window.handleFiles = async (fileList) => {
+  if (!fileList || !fileList.length) return;
+  if (currentCat === 'tutti') return;
+
+  const files = Array.from(fileList);
+  showLoader(`Caricamento 0/${files.length}…`);
+
+  let done = 0;
+  const errors = [];
+  for (const file of files) {
+    try {
+      const ext = (file.name.split('.').pop() || 'bin').toLowerCase();
+      const safeName = file.name
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9._-]/g, '_');
+      const ts = Date.now() + '_' + Math.random().toString(36).substr(2,5);
+      const path = `${cantiereId}/${currentCat}/${ts}_${safeName}`;
+      
+      const { error: upErr } = await sb.storage.from('cantieri-archivio').upload(path, file);
+      if (upErr) throw upErr;
+
+      // dimensioni immagine
+      let w = 0, h = 0;
+      if (file.type.startsWith('image/')) {
+        try {
+          const dim = await getImgDim(file);
+          w = dim.w; h = dim.h;
+        } catch(_) {}
+      }
+
+      const { error: dbErr } = await sb.from('cantieri_archivio').insert({
+        cantiere_id: cantiereId,
+        categoria: currentCat,
+        file_path: path,
+        tipo_mime: file.type || null,
+        dimensione_bytes: file.size || null,
+        larghezza: w || null,
+        altezza: h || null,
+        titolo: null
+      });
+      if (dbErr) throw dbErr;
+
+    } catch (e) {
+      console.error('Upload errore:', file.name, e);
+      errors.push(`${file.name}: ${e.message || e}`);
+    }
+    done++;
+    $('loaderText').textContent = `Caricamento ${done}/${files.length}…`;
+  }
+  $('fileInput').value = '';
+  
+  if (errors.length) {
+    alert(`Caricati ${done - errors.length}/${files.length}.\n\nErrori:\n` + errors.slice(0,3).join('\n'));
+  }
+  await load();
+};
+
+function getImgDim(file) {
+  return new Promise((res, rej) => {
+    const img = new Image();
+    img.onload = () => { res({w: img.naturalWidth, h: img.naturalHeight}); URL.revokeObjectURL(img.src); };
+    img.onerror = rej;
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+/* DELETE */
+window.deleteItem = async (id) => {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  if (!confirm('Eliminare questo file definitivamente?')) return;
+  showLoader('Eliminazione…');
+  try {
+    await sb.storage.from('cantieri-archivio').remove([item.file_path]);
+    const { error } = await sb.from('cantieri_archivio').delete().eq('id', id);
+    if (error) throw error;
+    await load();
+  } catch (e) {
+    alert('Errore: ' + (e.message || e));
+    hideLoader();
+  }
+};
+
+/* LIGHTBOX */
+window.openLightbox = (idx) => {
+  lbIndex = idx;
+  renderLightbox();
+  $('lightbox').classList.add('show');
+  document.body.style.overflow = 'hidden';
+};
+window.closeLightbox = () => {
+  $('lightbox').classList.remove('show');
+  document.body.style.overflow = '';
+};
+window.navLightbox = (d) => {
+  lbIndex = (lbIndex + d + lbVisible.length) % lbVisible.length;
+  renderLightbox();
+};
+
+function renderLightbox() {
+  const it = lbVisible[lbIndex];
+  if (!it) return;
+  const u = storageUrl('cantieri-archivio', it.file_path);
+  const isImg = (it.tipo_mime || '').startsWith('image/');
+  $('lbContent').innerHTML = isImg
+    ? `<img class="lb-img" src="${u}" alt="">`
+    : `<iframe class="lb-pdf" src="${u}"></iframe>`;
+  $('lbDownload').href = u;
+  $('lbDownload').download = it.file_path.split('/').pop();
+  $('lbTitolo').textContent = it.titolo || it.file_path.split('/').pop();
+  const date = new Date(it.created_at).toLocaleDateString('it-IT');
+  const sizeKB = it.dimensione_bytes ? ` · ${(it.dimensione_bytes/1024).toFixed(0)} KB` : '';
+  const dim = (it.larghezza && it.altezza) ? ` · ${it.larghezza}×${it.altezza}` : '';
+  $('lbMeta').textContent = `${it.categoria.toUpperCase()} · ${date}${sizeKB}${dim} · ${lbIndex+1}/${lbVisible.length}`;
+}
+
+// nav con tastiera
+document.addEventListener('keydown', e => {
+  if (!$('lightbox').classList.contains('show')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') navLightbox(-1);
+  if (e.key === 'ArrowRight') navLightbox(1);
+});
+// click sfondo
+$('lightbox').addEventListener('click', e => { if (e.target === $('lightbox')) closeLightbox(); });
+
+load();
+</script>
+</body>
+</html>
