@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Dettaglio fornitore - Studio Pizzone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1410">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="Pizzone">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #1a1410; --terra: #c9a76f; --terra-dim: #8c744d; --ivory: #fbf8f0;
+  --ivory-dim: rgba(251,248,240,0.6);
+  --green: #7fb069; --yellow: #e6b34a; --red: #d4675b; --blue: #6ba3d4;
+  --card: rgba(255,255,255,0.03); --border: rgba(201,167,111,0.15);
+  --border-strong: rgba(201,167,111,0.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ivory);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+body{background-image:linear-gradient(rgba(201,167,111,0.025) 1px, transparent 1px),linear-gradient(90deg, rgba(201,167,111,0.025) 1px, transparent 1px);background-size: 64px 64px}
+
+.container{max-width:1100px;margin:0 auto;padding:24px 20px 120px}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--ivory-dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:8px 0;transition:color .2s}
+.back-link:hover{color:var(--terra)}
+
+.fornitore-header{display:flex;gap:24px;align-items:center;margin:16px 0 32px;flex-wrap:wrap;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:16px}
+.avatar-big{width:80px;height:80px;border-radius:50%;background:rgba(201,167,111,0.1);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--terra);border:1px solid var(--border-strong);flex-shrink:0}
+.header-main{flex:1;min-width:200px}
+.header-nome{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:400;line-height:1.1}
+.header-nome em{font-style:italic;color:var(--terra)}
+.header-sub{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;color:var(--ivory-dim);font-size:13px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+.badge-tipo{padding:3px 8px;border-radius:10px;font-size:10px;letter-spacing:1px;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.badge-tipo.persona{background:rgba(107,163,212,0.15);color:var(--blue)}
+.badge-tipo.societa{background:rgba(230,179,74,0.15);color:var(--yellow)}
+.badge-mansione{background:rgba(201,167,111,0.15);color:var(--terra);padding:3px 10px;border-radius:10px;font-size:11px;letter-spacing:.5px;font-family:'JetBrains Mono',monospace;border:1px solid var(--border)}
+
+.btn{border:none;padding:11px 18px;border-radius:8px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s;white-space:nowrap}
+.btn-primary{background:var(--terra);color:var(--bg);font-weight:500}
+.btn-primary:hover{background:var(--ivory)}
+.btn-ghost{background:transparent;border:1px solid var(--border-strong);color:var(--ivory)}
+.btn-ghost:hover{border-color:var(--terra);color:var(--terra)}
+.btn-danger{background:transparent;border:1px solid rgba(212,103,91,.5);color:var(--red)}
+.btn-danger:hover{background:rgba(212,103,91,.1)}
+.btn-sm{padding:6px 12px;font-size:10px}
+
+.tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;background:transparent;border:none;color:var(--ivory-dim);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--ivory)}
+.tab.active{color:var(--terra);border-bottom-color:var(--terra)}
+.tab-count{background:var(--card);border:1px solid var(--border);padding:2px 8px;border-radius:10px;font-size:10px;margin-left:6px}
+
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:2px;overflow:hidden}
+.info-cell{padding:14px 16px;background:var(--bg)}
+.info-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--ivory-dim);text-transform:uppercase;margin-bottom:6px}
+.info-value{font-family:'Inter',sans-serif;font-size:15px;font-weight:400;word-break:break-word}
+.info-value.empty{color:var(--ivory-dim);font-style:italic;font-size:13px}
+
+.section-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--terra);margin:28px 0 12px}
+
+.lista{display:flex;flex-direction:column;gap:10px}
+.lista-item{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;text-decoration:none;color:var(--ivory);transition:all .2s}
+.lista-item:hover{border-color:var(--border-strong)}
+.li-main{min-width:0}
+.li-nome{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;line-height:1.2}
+.li-meta{display:flex;gap:14px;margin-top:4px;color:var(--ivory-dim);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;flex-wrap:wrap}
+.li-right{display:flex;gap:8px;align-items:center;flex-shrink:0}
+
+.chip-stato{padding:2px 8px;border-radius:10px;font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px;text-transform:uppercase}
+.chip-stato.attivo{background:rgba(127,176,105,.15);color:var(--green)}
+.chip-stato.pausa{background:rgba(230,179,74,.15);color:var(--yellow)}
+.chip-stato.chiuso{background:rgba(251,248,240,.1);color:var(--ivory-dim)}
+
+.empty-list{text-align:center;padding:60px 20px;color:var(--ivory-dim);border:1px dashed var(--border);border-radius:12px}
+.empty-list .big{font-family:'Cormorant Garamond',serif;font-size:24px;font-style:italic;color:var(--terra-dim);margin-bottom:8px}
+
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal-backdrop.show{display:flex}
+.modal{background:#221a14;border:1px solid var(--border-strong);border-radius:16px;width:100%;max-width:640px;max-height:calc(100vh - 40px);overflow-y:auto;padding:32px}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:4px}
+.modal h2 em{font-style:italic;color:var(--terra)}
+.modal-sub{color:var(--ivory-dim);font-size:13px;margin-bottom:24px}
+
+.form-row{margin-bottom:16px}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ivory-dim);display:block;margin-bottom:6px}
+input[type=text],input[type=email],input[type=tel],input[type=date],textarea,select{width:100%;background:rgba(0,0,0,0.2);border:1px solid var(--border);color:var(--ivory);padding:10px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;transition:border-color .2s}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--terra)}
+textarea{resize:vertical;min-height:70px;font-family:'Inter',sans-serif}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a76f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-size:16px;background-position:right 12px center;background-repeat:no-repeat;padding-right:40px}
+
+.tipo-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;padding:4px;background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:10px}
+.tipo-toggle label{padding:12px;text-align:center;cursor:pointer;border-radius:8px;margin:0;font-size:12px;letter-spacing:1px;transition:all .2s;color:var(--ivory-dim)}
+.tipo-toggle input[type=radio]{display:none}
+.tipo-toggle input[type=radio]:checked + label{background:var(--terra);color:var(--bg);font-weight:500}
+
+.mansione-wrap{position:relative}
+.mansione-suggest{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:10;background:#221a14;border:1px solid var(--border-strong);border-radius:8px;max-height:200px;overflow-y:auto;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.mansione-suggest.show{display:block}
+.mansione-suggest-item{padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.mansione-suggest-item:last-child{border-bottom:none}
+.mansione-suggest-item:hover{background:rgba(201,167,111,0.08)}
+.mansione-suggest-item .count{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ivory-dim)}
+.mansione-suggest-new{color:var(--terra);font-style:italic}
+
+.form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+
+.loader{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loader.show{display:flex}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--terra);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:600px){
+  .container{padding:16px 14px 100px}
+  .header-nome{font-size:30px}
+  .avatar-big{width:64px;height:64px;font-size:28px}
+  .info-grid{grid-template-columns:1fr}
+  .form-row-2,.form-row-3{grid-template-columns:1fr}
+  .lista-item{grid-template-columns:1fr}
+  .li-right{padding-top:8px;border-top:1px solid var(--border);margin-top:4px;justify-content:space-between}
+  .modal{padding:24px 20px;border-radius:16px 16px 0 0;margin-top:auto}
+  .modal-backdrop{align-items:flex-end;padding:0}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="fornitori.html" class="back-link">← Tutti i fornitori</a>
+
+  <div id="fornitoreHeader"></div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="anagrafica" onclick="switchTab('anagrafica')">Anagrafica</button>
+    <button class="tab" data-tab="cantieri" onclick="switchTab('cantieri')">Cantieri <span class="tab-count" id="cntCantieri">0</span></button>
+  </div>
+
+  <!-- TAB ANAGRAFICA -->
+  <div class="tab-content active" id="tab-anagrafica">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;gap:8px">
+      <button class="btn btn-ghost btn-sm" onclick="openEdit()">Modifica dati</button>
+      <button class="btn btn-danger btn-sm" onclick="deleteFornitore()">Elimina fornitore</button>
+    </div>
+    <div id="anagraficaContainer"></div>
+  </div>
+
+  <!-- TAB CANTIERI -->
+  <div class="tab-content" id="tab-cantieri">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+      <p style="color:var(--ivory-dim);font-size:13px" id="cantieriLabel">—</p>
+      <button class="btn btn-primary btn-sm" onclick="openCollegaCantiere()">+ Collega cantiere</button>
+    </div>
+    <div id="cantieriContainer"></div>
+  </div>
+</div>
+
+
+<!-- MODAL EDIT -->
+<div class="modal-backdrop" id="modalEdit" onclick="closeModalEditOnBg(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>Modifica <em>anagrafica</em></h2>
+    <p class="modal-sub">Aggiorna i dati del fornitore</p>
+
+    <div class="tipo-toggle">
+      <input type="radio" name="tipoE" id="tipoEPersona" value="persona" onchange="switchTipoEdit()">
+      <label for="tipoEPersona">Persona fisica</label>
+      <input type="radio" name="tipoE" id="tipoESocieta" value="societa" onchange="switchTipoEdit()">
+      <label for="tipoESocieta">Società</label>
+    </div>
+
+    <form id="editForm" onsubmit="saveEdit(event)">
+      <div id="eFormPersona">
+        <div class="form-row-2">
+          <div class="form-row"><label>Nome *</label><input type="text" id="eNome"></div>
+          <div class="form-row"><label>Cognome *</label><input type="text" id="eCognome"></div>
+        </div>
+        <div class="form-row"><label>Codice fiscale *</label><input type="text" id="eCFPersona" style="text-transform:uppercase" maxlength="16"></div>
+        <div class="form-row-2">
+          <div class="form-row"><label>Data di nascita</label><input type="date" id="eDataNascita"></div>
+          <div class="form-row"><label>Luogo di nascita</label><input type="text" id="eLuogoNascita"></div>
+        </div>
+      </div>
+      <div id="eFormSocieta" style="display:none">
+        <div class="form-row"><label>Ragione sociale *</label><input type="text" id="eRagSoc"></div>
+        <div class="form-row-2">
+          <div class="form-row"><label>Forma giuridica</label>
+            <select id="eFormaGiu">
+              <option value="">—</option>
+              <option>S.r.l.</option><option>S.r.l.s.</option><option>S.p.A.</option>
+              <option>S.n.c.</option><option>S.a.s.</option>
+              <option>Ditta individuale</option><option>Impresa individuale</option>
+              <option>Cooperativa</option><option>Consorzio</option><option>Ente pubblico</option><option>Altro</option>
+            </select>
+          </div>
+          <div class="form-row"><label>Partita IVA *</label><input type="text" id="ePIVA" maxlength="11"></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-row"><label>Codice fiscale società</label><input type="text" id="eCFSocieta" style="text-transform:uppercase"></div>
+          <div class="form-row"><label>Codice SDI</label><input type="text" id="eCodSDI" maxlength="7"></div>
+        </div>
+        <div class="form-row"><label>PEC</label><input type="email" id="ePEC"></div>
+      </div>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;margin:20px 0 12px;font-style:italic;color:var(--terra)">Mansione</h3>
+      <div class="form-row mansione-wrap">
+        <label>Mansione *</label>
+        <input type="text" id="eMansione" autocomplete="off" oninput="suggestMansione()" onfocus="suggestMansione()" onblur="setTimeout(hideMansioneSuggest, 150)">
+        <div class="mansione-suggest" id="mansioneSuggest"></div>
+      </div>
+
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;margin:20px 0 12px;font-style:italic;color:var(--terra)">Contatti</h3>
+      <div class="form-row-2">
+        <div class="form-row"><label>Telefono</label><input type="tel" id="eTel"></div>
+        <div class="form-row"><label>Email</label><input type="email" id="eEmail"></div>
+      </div>
+
+      <h3 id="eTitoloIndirizzo" style="font-family:'Cormorant Garamond',serif;font-size:18px;margin:20px 0 12px;font-style:italic;color:var(--terra)">Indirizzo</h3>
+      <div class="form-row-3">
+        <div class="form-row"><label>Via</label><input type="text" id="eIndirizzo"></div>
+        <div class="form-row"><label>N. civico</label><input type="text" id="eCivico"></div>
+        <div class="form-row"><label>CAP</label><input type="text" id="eCAP" maxlength="5"></div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row"><label>Città</label><input type="text" id="eCitta"></div>
+        <div class="form-row"><label>Provincia</label><input type="text" id="eProvincia" maxlength="2" style="text-transform:uppercase"></div>
+      </div>
+
+      <div class="form-row"><label>Note</label><textarea id="eNote"></textarea></div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModalEdit()">Annulla</button>
+        <button type="submit" class="btn btn-primary">Salva</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- MODAL COLLEGA CANTIERE -->
+<div class="modal-backdrop" id="modalCollega" onclick="closeCollegaOnBg(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2>Collega <em>cantiere</em></h2>
+    <p class="modal-sub">Seleziona uno o più cantieri dove lavora questo fornitore</p>
+    <div style="margin-bottom:16px">
+      <input type="text" id="searchCantieri" placeholder="Cerca cantiere…" oninput="renderCantieriDisponibili()" style="margin-bottom:0">
+    </div>
+    <div id="cantieriDisponibili" style="max-height:50vh;overflow-y:auto"></div>
+    <div class="form-actions">
+      <button type="button" class="btn btn-ghost" onclick="closeCollega()">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--ivory-dim)">CARICAMENTO…</div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://dlswafwbliqabozeuapv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FpMAG0z69Exc9KQZp4m3Qw_JhYlqIC0';
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = id => document.getElementById(id);
+const showLoader = () => $('loader').classList.add('show');
+const hideLoader = () => $('loader').classList.remove('show');
+const escape = s => String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const url = new URL(location.href);
+const fornitoreId = url.searchParams.get('id');
+if (!fornitoreId) { location.href = 'fornitori.html'; }
+
+let fornitore = null;
+let cantieri = [];
+let tutteMansioni = [];
+let tuttiCantieri = [];
+
+async function load() {
+  showLoader();
+  try {
+    const { data: f, error: e1 } = await sb.from('fornitori').select('*').eq('id', fornitoreId).single();
+    if (e1) throw e1;
+    fornitore = f;
+
+    // cantieri collegati (via tabella ponte)
+    const { data: cfRows } = await sb
+      .from('cantieri_fornitori')
+      .select('cantiere_id, cantieri(*)')
+      .eq('fornitore_id', fornitoreId);
+    cantieri = (cfRows || []).map(r => r.cantieri).filter(Boolean);
+
+    // mansioni per autocomplete
+    const { data: mans } = await sb.from('mansioni_usate').select('*');
+    tutteMansioni = mans || [];
+
+    renderHeader();
+    renderAnagrafica();
+    renderCantieri();
+  } catch (e) {
+    alert('Errore: ' + (e.message || e));
+    console.error(e);
+  } finally {
+    hideLoader();
+  }
+}
+
+function nomeFornitore(f) {
+  if (!f) return '—';
+  if (f.tipo === 'societa') return f.ragione_sociale || '—';
+  return `${f.nome||''} ${f.cognome||''}`.trim() || '—';
+}
+
+function initialsOf(f) {
+  if (!f) return '·';
+  if (f.tipo === 'societa') {
+    return ((f.ragione_sociale||'').trim().split(/\s+/)[0]?.[0] || '·').toUpperCase();
+  }
+  return ((f.nome||'')[0] + (f.cognome||'')[0]).toUpperCase() || '·';
+}
+
+function renderHeader() {
+  const badgeTipo = fornitore.tipo === 'societa'
+    ? '<span class="badge-tipo societa">Società</span>'
+    : '<span class="badge-tipo persona">Persona</span>';
+  const badgeMans = fornitore.mansione 
+    ? `<span class="badge-mansione">${escape(fornitore.mansione)}</span>` 
+    : '';
+  const meta = [];
+  if (fornitore.codice_identificativo) meta.push(`${fornitore.tipo==='societa'?'P.IVA':'CF'}: ${fornitore.codice_identificativo}`);
+  if (fornitore.telefono) meta.push(`☏ ${fornitore.telefono}`);
+  if (fornitore.email) meta.push(`✉ ${fornitore.email}`);
+
+  $('fornitoreHeader').innerHTML = `
+    <div class="fornitore-header">
+      <div class="avatar-big">${initialsOf(fornitore)}</div>
+      <div class="header-main">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="header-nome">${escape(nomeFornitore(fornitore))}</div>
+          ${badgeTipo}
+          ${badgeMans}
+        </div>
+        <div class="header-sub">
+          ${meta.map(m => `<span>${escape(m)}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  document.title = nomeFornitore(fornitore) + ' - Studio Pizzone';
+}
+
+function renderAnagrafica() {
+  const f = fornitore;
+  const rows = [];
+
+  if (f.tipo === 'societa') {
+    rows.push(['Ragione sociale', f.ragione_sociale]);
+    rows.push(['Forma giuridica', f.forma_giuridica]);
+    rows.push(['Partita IVA', f.codice_identificativo]);
+    rows.push(['Codice fiscale', f.cf_societa]);
+    rows.push(['Codice SDI', f.codice_sdi]);
+    rows.push(['PEC', f.pec]);
+  } else {
+    rows.push(['Nome', f.nome]);
+    rows.push(['Cognome', f.cognome]);
+    rows.push(['Codice fiscale', f.codice_identificativo]);
+    rows.push(['Data di nascita', f.data_nascita ? new Date(f.data_nascita).toLocaleDateString('it-IT') : null]);
+    rows.push(['Luogo di nascita', f.luogo_nascita]);
+  }
+  rows.push(['Mansione', f.mansione]);
+  rows.push(['Telefono', f.telefono]);
+  rows.push(['Email', f.email]);
+
+  const indirizzoTitolo = f.tipo === 'societa' ? 'Sede legale' : 'Indirizzo';
+  const addr = [
+    f.indirizzo ? `${f.indirizzo}${f.civico ? ', '+f.civico : ''}` : null,
+    f.cap || f.citta ? `${f.cap||''} ${f.citta||''}${f.provincia?' ('+f.provincia+')':''}`.trim() : null
+  ].filter(Boolean).join(' · ') || null;
+
+  $('anagraficaContainer').innerHTML = `
+    <h2 class="section-title">Dati anagrafici</h2>
+    <div class="info-grid">
+      ${rows.map(([l,v]) => `
+        <div class="info-cell">
+          <div class="info-label">${escape(l)}</div>
+          <div class="info-value ${v?'':'empty'}">${v ? escape(v) : 'non inserito'}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <h2 class="section-title">${indirizzoTitolo}</h2>
+    <div class="info-grid">
+      <div class="info-cell">
+        <div class="info-label">Indirizzo completo</div>
+        <div class="info-value ${addr?'':'empty'}">${addr ? escape(addr) : 'non inserito'}</div>
+      </div>
+    </div>
+
+    ${f.note ? `
+      <h2 class="section-title">Note</h2>
+      <div class="info-grid">
+        <div class="info-cell">
+          <div class="info-value" style="white-space:pre-wrap">${escape(f.note)}</div>
+        </div>
+      </div>
+    ` : ''}
+  `;
+}
+
+function renderCantieri() {
+  $('cntCantieri').textContent = cantieri.length;
+  $('cantieriLabel').textContent = cantieri.length === 0
+    ? 'Nessun cantiere collegato'
+    : cantieri.length === 1 ? '1 cantiere' : `${cantieri.length} cantieri`;
+
+  if (cantieri.length === 0) {
+    $('cantieriContainer').innerHTML = `
+      <div class="empty-list">
+        <div class="big">Nessun cantiere ancora</div>
+        <div>Collega i cantieri dove lavora questo fornitore</div>
+      </div>`;
+    return;
+  }
+
+  const html = cantieri.map(c => {
+    const stato = (c.stato || 'attivo').toLowerCase();
+    return `
+      <div class="lista-item">
+        <a href="cantiere-dettaglio.html?id=${c.id}" style="text-decoration:none;color:inherit;flex:1;min-width:0">
+          <div class="li-nome">${escape(c.nome || 'Senza nome')}</div>
+          <div class="li-meta">
+            <span><span class="chip-stato ${stato}">${escape(stato)}</span></span>
+            ${c.indirizzo ? `<span>◉ ${escape(c.indirizzo)}</span>` : ''}
+            ${c.cliente ? `<span>Cliente: ${escape(c.cliente)}</span>` : ''}
+          </div>
+        </a>
+        <div class="li-right">
+          <button class="btn btn-ghost btn-sm" onclick="scollega('${c.id}')" title="Scollega">Scollega</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+  $('cantieriContainer').innerHTML = `<div class="lista">${html}</div>`;
+}
+
+window.switchTab = tab => {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  document.querySelectorAll('.tab-content').forEach(tc => tc.classList.toggle('active', tc.id === 'tab-'+tab));
+};
+
+/* EDIT */
+window.openEdit = () => {
+  const f = fornitore;
+  document.querySelector(`input[name=tipoE][value=${f.tipo}]`).checked = true;
+  switchTipoEdit();
+  if (f.tipo === 'persona') {
+    $('eNome').value = f.nome || '';
+    $('eCognome').value = f.cognome || '';
+    $('eCFPersona').value = f.codice_identificativo || '';
+    $('eDataNascita').value = f.data_nascita || '';
+    $('eLuogoNascita').value = f.luogo_nascita || '';
+  } else {
+    $('eRagSoc').value = f.ragione_sociale || '';
+    $('eFormaGiu').value = f.forma_giuridica || '';
+    $('ePIVA').value = f.codice_identificativo || '';
+    $('eCFSocieta').value = f.cf_societa || '';
+    $('eCodSDI').value = f.codice_sdi || '';
+    $('ePEC').value = f.pec || '';
+  }
+  $('eMansione').value = f.mansione || '';
+  $('eTel').value = f.telefono || '';
+  $('eEmail').value = f.email || '';
+  $('eIndirizzo').value = f.indirizzo || '';
+  $('eCivico').value = f.civico || '';
+  $('eCAP').value = f.cap || '';
+  $('eCitta').value = f.citta || '';
+  $('eProvincia').value = f.provincia || '';
+  $('eNote').value = f.note || '';
+  $('modalEdit').classList.add('show');
+};
+window.closeModalEdit = () => $('modalEdit').classList.remove('show');
+window.closeModalEditOnBg = e => { if (e.target === $('modalEdit')) closeModalEdit(); };
+
+window.switchTipoEdit = () => {
+  const t = document.querySelector('input[name=tipoE]:checked').value;
+  $('eFormPersona').style.display = t === 'persona' ? 'block' : 'none';
+  $('eFormSocieta').style.display = t === 'societa' ? 'block' : 'none';
+  $('eTitoloIndirizzo').textContent = t === 'societa' ? 'Sede legale' : 'Indirizzo';
+};
+
+/* AUTOCOMPLETE MANSIONI */
+window.suggestMansione = () => {
+  const val = $('eMansione').value.trim().toLowerCase();
+  const box = $('mansioneSuggest');
+  const matches = tutteMansioni.filter(m => !val || m.mansione.toLowerCase().includes(val));
+  let html = '';
+  if (matches.length > 0) {
+    html = matches.map(m => `
+      <div class="mansione-suggest-item" onclick="pickMansione('${escape(m.mansione).replace(/'/g,"\\'")}')">
+        <span>${escape(m.mansione)}</span>
+        <span class="count">${m.n_fornitori} forn.</span>
+      </div>
+    `).join('');
+  }
+  if (val && !tutteMansioni.some(m => m.mansione.toLowerCase() === val)) {
+    html += `<div class="mansione-suggest-item mansione-suggest-new" onclick="pickMansione('${escape($('eMansione').value.trim()).replace(/'/g,"\\'")}')">
+      + Crea nuova mansione: "${escape($('eMansione').value.trim())}"
+    </div>`;
+  }
+  if (!html) { box.classList.remove('show'); return; }
+  box.innerHTML = html;
+  box.classList.add('show');
+};
+window.hideMansioneSuggest = () => $('mansioneSuggest').classList.remove('show');
+window.pickMansione = (m) => { $('eMansione').value = m; hideMansioneSuggest(); };
+
+window.saveEdit = async (e) => {
+  e.preventDefault();
+  const tipo = document.querySelector('input[name=tipoE]:checked').value;
+
+  if (tipo === 'persona') {
+    if (!$('eNome').value.trim() || !$('eCognome').value.trim() || !$('eCFPersona').value.trim()) {
+      alert('Nome, cognome e codice fiscale obbligatori.'); return;
+    }
+  } else {
+    if (!$('eRagSoc').value.trim() || !$('ePIVA').value.trim()) {
+      alert('Ragione sociale e Partita IVA obbligatori.'); return;
+    }
+  }
+  if (!$('eMansione').value.trim()) {
+    alert('Inserisci una mansione.'); return;
+  }
+
+  const payload = {
+    tipo,
+    mansione: $('eMansione').value.trim(),
+    telefono: $('eTel').value.trim() || null,
+    email: $('eEmail').value.trim() || null,
+    indirizzo: $('eIndirizzo').value.trim() || null,
+    civico: $('eCivico').value.trim() || null,
+    citta: $('eCitta').value.trim() || null,
+    cap: $('eCAP').value.trim() || null,
+    provincia: $('eProvincia').value.trim().toUpperCase() || null,
+    note: $('eNote').value.trim() || null,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (tipo === 'persona') {
+    payload.nome = $('eNome').value.trim();
+    payload.cognome = $('eCognome').value.trim();
+    payload.data_nascita = $('eDataNascita').value || null;
+    payload.luogo_nascita = $('eLuogoNascita').value.trim() || null;
+    payload.codice_identificativo = $('eCFPersona').value.trim().toUpperCase();
+    payload.ragione_sociale = null; payload.forma_giuridica = null;
+    payload.cf_societa = null; payload.codice_sdi = null; payload.pec = null;
+  } else {
+    payload.ragione_sociale = $('eRagSoc').value.trim();
+    payload.forma_giuridica = $('eFormaGiu').value || null;
+    payload.codice_identificativo = $('ePIVA').value.trim();
+    payload.cf_societa = $('eCFSocieta').value.trim().toUpperCase() || null;
+    payload.codice_sdi = $('eCodSDI').value.trim().toUpperCase() || null;
+    payload.pec = $('ePEC').value.trim() || null;
+    payload.nome = null; payload.cognome = null;
+    payload.data_nascita = null; payload.luogo_nascita = null;
+  }
+
+  showLoader();
+  try {
+    const { error } = await sb.from('fornitori').update(payload).eq('id', fornitoreId);
+    if (error) throw error;
+    closeModalEdit();
+    await load();
+  } catch (err) {
+    alert('Errore: ' + (err.message || err));
+  } finally {
+    hideLoader();
+  }
+};
+
+window.deleteFornitore = async () => {
+  if (!confirm(`Eliminare definitivamente "${nomeFornitore(fornitore)}"?\n\nI collegamenti ai cantieri verranno rimossi.`)) return;
+  showLoader();
+  try {
+    const { error } = await sb.from('fornitori').delete().eq('id', fornitoreId);
+    if (error) throw error;
+    location.href = 'fornitori.html';
+  } catch (err) {
+    alert('Errore: ' + (err.message || err));
+    hideLoader();
+  }
+};
+
+/* COLLEGA CANTIERI */
+window.openCollegaCantiere = async () => {
+  $('modalCollega').classList.add('show');
+  $('searchCantieri').value = '';
+  $('cantieriDisponibili').innerHTML = '<p style="color:var(--ivory-dim);padding:20px;text-align:center">Caricamento…</p>';
+  try {
+    const { data } = await sb.from('cantieri').select('*').order('created_at', { ascending: false });
+    tuttiCantieri = data || [];
+    renderCantieriDisponibili();
+  } catch (e) {
+    $('cantieriDisponibili').innerHTML = '<p style="color:var(--red);padding:20px">Errore: ' + e.message + '</p>';
+  }
+};
+window.closeCollega = () => $('modalCollega').classList.remove('show');
+window.closeCollegaOnBg = e => { if (e.target === $('modalCollega')) closeCollega(); };
+
+window.renderCantieriDisponibili = () => {
+  const search = $('searchCantieri').value.trim().toLowerCase();
+  const collegatiIds = new Set(cantieri.map(c => c.id));
+  const items = tuttiCantieri.filter(c => {
+    if (collegatiIds.has(c.id)) return false; // nascondi già collegati
+    if (!search) return true;
+    return (c.nome||'').toLowerCase().includes(search) 
+      || (c.indirizzo||'').toLowerCase().includes(search) 
+      || (c.cliente||'').toLowerCase().includes(search);
+  });
+
+  if (items.length === 0) {
+    $('cantieriDisponibili').innerHTML = `
+      <div class="empty-list" style="padding:30px 20px">
+        <div class="big" style="font-size:18px">${search ? 'Nessun risultato' : 'Nessun cantiere da collegare'}</div>
+        <div>${search ? 'Prova con un\'altra ricerca' : 'Tutti i cantieri sono già collegati'}</div>
+      </div>`;
+    return;
+  }
+
+  $('cantieriDisponibili').innerHTML = `<div class="lista">${items.map(c => {
+    const stato = (c.stato || 'attivo').toLowerCase();
+    return `
+      <div class="lista-item" style="cursor:pointer" onclick="collegaCantiere('${c.id}')">
+        <div class="li-main">
+          <div class="li-nome">${escape(c.nome || 'Senza nome')}</div>
+          <div class="li-meta">
+            <span><span class="chip-stato ${stato}">${escape(stato)}</span></span>
+            ${c.indirizzo ? `<span>◉ ${escape(c.indirizzo)}</span>` : ''}
+          </div>
+        </div>
+        <div class="li-right"><button class="btn btn-ghost btn-sm">Collega</button></div>
+      </div>
+    `;
+  }).join('')}</div>`;
+};
+
+window.collegaCantiere = async (cantiereId) => {
+  showLoader();
+  try {
+    const { error } = await sb.from('cantieri_fornitori').insert({
+      cantiere_id: cantiereId,
+      fornitore_id: fornitoreId
+    });
+    if (error) throw error;
+    closeCollega();
+    await load();
+    switchTab('cantieri');
+  } catch (e) {
+    alert('Errore: ' + (e.message || e));
+    hideLoader();
+  }
+};
+
+window.scollega = async (cantiereId) => {
+  if (!confirm('Scollegare questo cantiere dal fornitore?')) return;
+  showLoader();
+  try {
+    const { error } = await sb.from('cantieri_fornitori')
+      .delete()
+      .eq('cantiere_id', cantiereId)
+      .eq('fornitore_id', fornitoreId);
+    if (error) throw error;
+    await load();
+    switchTab('cantieri');
+  } catch (e) {
+    alert('Errore: ' + (e.message || e));
+    hideLoader();
+  }
+};
+
+load();
+</script>
+</body>
+</html>
