@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Clienti - Studio Pizzone</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1a1410">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icons/icon-120.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-title" content="Pizzone">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #1a1410;
+  --terra: #c9a76f;
+  --terra-dim: #8c744d;
+  --ivory: #fbf8f0;
+  --ivory-dim: rgba(251,248,240,0.6);
+  --green: #7fb069;
+  --yellow: #e6b34a;
+  --red: #d4675b;
+  --blue: #6ba3d4;
+  --card: rgba(255,255,255,0.03);
+  --border: rgba(201,167,111,0.15);
+  --border-strong: rgba(201,167,111,0.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ivory);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+body{
+  background-image:
+    linear-gradient(rgba(201,167,111,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,167,111,0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.container{max-width:1200px;margin:0 auto;padding:24px 20px 120px}
+
+/* header */
+header.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;gap:12px;flex-wrap:wrap}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--ivory-dim);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:8px 0;transition:color .2s}
+.back-link:hover{color:var(--terra)}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:400}
+.page-title em{font-style:italic;color:var(--terra)}
+.page-subtitle{color:var(--ivory-dim);font-size:14px;margin-top:4px}
+
+/* toolbar */
+.toolbar{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:200px;position:relative}
+.search-wrap input{
+  width:100%;background:var(--card);border:1px solid var(--border);color:var(--ivory);
+  padding:12px 16px 12px 42px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;
+  transition:border-color .2s;
+}
+.search-wrap input:focus{outline:none;border-color:var(--terra)}
+.search-wrap::before{
+  content:'';position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a76f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+  background-size:contain;background-repeat:no-repeat;opacity:.7;
+}
+.btn{
+  border:none;padding:12px 20px;border-radius:8px;cursor:pointer;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  transition:all .2s;white-space:nowrap;
+}
+.btn-primary{background:var(--terra);color:var(--bg);font-weight:500}
+.btn-primary:hover{background:var(--ivory);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border-strong);color:var(--ivory)}
+.btn-ghost:hover{border-color:var(--terra);color:var(--terra)}
+
+/* filter chips */
+.filters{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.chip{
+  padding:8px 14px;border:1px solid var(--border);border-radius:20px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1px;
+  cursor:pointer;transition:all .2s;background:transparent;color:var(--ivory-dim);
+}
+.chip:hover{border-color:var(--border-strong);color:var(--ivory)}
+.chip.active{background:var(--terra);border-color:var(--terra);color:var(--bg);font-weight:500}
+
+/* lista clienti */
+.clienti-list{display:flex;flex-direction:column;gap:12px}
+.cliente-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:20px;cursor:pointer;transition:all .2s;text-decoration:none;color:var(--ivory);
+  display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;
+}
+.cliente-card:hover{border-color:var(--border-strong);transform:translateY(-1px)}
+.cliente-avatar{
+  width:48px;height:48px;border-radius:50%;background:rgba(201,167,111,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--terra);
+  border:1px solid var(--border-strong);flex-shrink:0;
+}
+.cliente-info{min-width:0;display:flex;flex-direction:column;gap:6px}
+.cliente-nome{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;line-height:1.2;word-wrap:break-word}
+.cliente-meta{display:flex;gap:16px;font-size:12px;color:var(--ivory-dim);flex-wrap:wrap;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+.cliente-meta span{display:inline-flex;align-items:center;gap:6px}
+.badge-tipo{
+  padding:3px 8px;border-radius:10px;font-size:10px;letter-spacing:1px;
+  font-family:'JetBrains Mono',monospace;text-transform:uppercase;
+}
+.badge-tipo.persona{background:rgba(107,163,212,0.15);color:var(--blue)}
+.badge-tipo.societa{background:rgba(230,179,74,0.15);color:var(--yellow)}
+.cliente-stats{display:flex;gap:20px;align-items:center;flex-shrink:0}
+.stat-box{text-align:center}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:var(--terra);line-height:1}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--ivory-dim);text-transform:uppercase;margin-top:4px}
+
+.empty-state{
+  text-align:center;padding:80px 20px;color:var(--ivory-dim);
+}
+.empty-state .big{font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;margin-bottom:12px;color:var(--terra-dim)}
+
+/* modal */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;z-index:100;padding:20px;
+}
+.modal-backdrop.show{display:flex}
+.modal{
+  background:#221a14;border:1px solid var(--border-strong);border-radius:16px;
+  width:100%;max-width:640px;max-height:calc(100vh - 40px);overflow-y:auto;
+  padding:32px;
+}
+.modal h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:4px}
+.modal h2 em{font-style:italic;color:var(--terra)}
+.modal-sub{color:var(--ivory-dim);font-size:13px;margin-bottom:24px}
+
+/* form */
+.form-row{margin-bottom:16px}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ivory-dim);display:block;margin-bottom:6px}
+input[type=text],input[type=email],input[type=tel],input[type=date],textarea,select{
+  width:100%;background:rgba(0,0,0,0.2);border:1px solid var(--border);color:var(--ivory);
+  padding:10px 14px;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;
+  transition:border-color .2s;
+}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--terra)}
+textarea{resize:vertical;min-height:70px;font-family:'Inter',sans-serif}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23c9a76f' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-size:16px;background-position:right 12px center;background-repeat:no-repeat;padding-right:40px}
+
+/* toggle persona/societa */
+.tipo-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;padding:4px;background:rgba(0,0,0,0.2);border:1px solid var(--border);border-radius:10px}
+.tipo-toggle label{padding:12px;text-align:center;cursor:pointer;border-radius:8px;margin:0;font-size:12px;letter-spacing:1px;transition:all .2s;color:var(--ivory-dim)}
+.tipo-toggle input[type=radio]{display:none}
+.tipo-toggle input[type=radio]:checked + label{background:var(--terra);color:var(--bg);font-weight:500}
+
+.form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+
+.loader{
+  position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;
+  display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+}
+.loader.show{display:flex}
+.spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--terra);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:600px){
+  .container{padding:16px 14px 100px}
+  .page-title{font-size:28px}
+  .cliente-card{grid-template-columns:auto 1fr;gap:14px}
+  .cliente-stats{grid-column:1/-1;justify-content:flex-start;padding-top:12px;border-top:1px solid var(--border);gap:24px}
+  .form-row-2,.form-row-3{grid-template-columns:1fr}
+  .modal{padding:24px 20px;border-radius:16px 16px 0 0;margin-top:auto}
+  .modal-backdrop{align-items:flex-end;padding:0}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <a href="index.html" class="back-link">← Torna al portale</a>
+
+  <header class="topbar">
+    <div>
+      <h1 class="page-title">Clienti <em>&amp; anagrafiche</em></h1>
+      <p class="page-subtitle" id="countLabel">Caricamento…</p>
+    </div>
+    <button class="btn btn-primary" onclick="openNewCliente()">+ Nuovo cliente</button>
+  </header>
+
+  <div class="toolbar">
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Cerca per nome, P.IVA, codice fiscale…" oninput="filterList()">
+    </div>
+  </div>
+
+  <div class="filters">
+    <button class="chip active" data-filter="tutti" onclick="setFilter('tutti')">Tutti</button>
+    <button class="chip" data-filter="persona" onclick="setFilter('persona')">Persone fisiche</button>
+    <button class="chip" data-filter="societa" onclick="setFilter('societa')">Società</button>
+  </div>
+
+  <div id="listContainer"></div>
+</div>
+
+
+<!-- MODAL NUOVO CLIENTE -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModalOnBackdrop(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h2 id="modalTitle">Nuovo <em>cliente</em></h2>
+    <p class="modal-sub" id="modalSub">Inserisci i dati anagrafici</p>
+
+    <!-- tipo toggle -->
+    <div class="tipo-toggle">
+      <input type="radio" name="tipo" id="tipoPersona" value="persona" checked onchange="switchTipo()">
+      <label for="tipoPersona">Persona fisica</label>
+      <input type="radio" name="tipo" id="tipoSocieta" value="societa" onchange="switchTipo()">
+      <label for="tipoSocieta">Società</label>
+    </div>
+
+    <form id="clienteForm" onsubmit="saveCliente(event)">
+      <!-- PERSONA -->
+      <div id="formPersona">
+        <div class="form-row-2">
+          <div class="form-row">
+            <label>Nome *</label>
+            <input type="text" name="nome" id="fNome">
+          </div>
+          <div class="form-row">
+            <label>Cognome *</label>
+            <input type="text" name="cognome" id="fCognome">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Codice fiscale *</label>
+          <input type="text" name="cf_persona" id="fCFPersona" style="text-transform:uppercase" maxlength="16" placeholder="RSSMRA80A01H501Z">
+        </div>
+        <div class="form-row-2">
+          <div class="form-row">
+            <label>Data di nascita</label>
+            <input type="date" name="data_nascita" id="fDataNascita">
+          </div>
+          <div class="form-row">
+            <label>Luogo di nascita</label>
+            <input type="text" name="luogo_nascita" id="fLuogoNascita">
+          </div>
+        </div>
+      </div>
+
+      <!-- SOCIETÀ -->
+      <div id="formSocieta" style="display:none">
+        <div class="form-row">
+          <label>Ragione sociale *</label>
+          <input type="text" name="ragione_sociale" id="fRagSoc" placeholder="Es. Rossi Costruzioni S.r.l.">
+        </div>
+        <div class="form-row-2">
+          <div class="form-row">
+            <label>Forma giuridica</label>
+            <select id="fFormaGiu">
+              <option value="">—</option>
+              <option>S.r.l.</option>
+              <option>S.r.l.s.</option>
+              <option>S.p.A.</option>
+              <option>S.n.c.</option>
+              <option>S.a.s.</option>
+              <option>Ditta individuale</option>
+              <option>Impresa individuale</option>
+              <option>Cooperativa</option>
+              <option>Consorzio</option>
+              <option>Ente pubblico</option>
+              <option>Altro</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>Partita IVA *</label>
+            <input type="text" name="piva" id="fPIVA" maxlength="11" placeholder="12345678901">
+          </div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-row">
+            <label>Codice fiscale società</label>
+            <input type="text" name="cf_societa" id="fCFSocieta" style="text-transform:uppercase" placeholder="Se diverso dalla P.IVA">
+          </div>
+          <div class="form-row">
+            <label>Codice SDI</label>
+            <input type="text" name="codice_sdi" id="fCodSDI" maxlength="7" placeholder="0000000">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>PEC</label>
+          <input type="email" name="pec" id="fPEC" placeholder="azienda@pec.it">
+        </div>
+      </div>
+
+      <!-- CONTATTI (comuni) -->
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;margin:20px 0 12px;font-style:italic;color:var(--terra)">Contatti</h3>
+      <div class="form-row-2">
+        <div class="form-row">
+          <label>Telefono</label>
+          <input type="tel" id="fTel">
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" id="fEmail">
+        </div>
+      </div>
+
+      <!-- INDIRIZZO (comune) -->
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:18px;margin:20px 0 12px;font-style:italic;color:var(--terra)" id="titoloIndirizzo">Indirizzo</h3>
+      <div class="form-row-3">
+        <div class="form-row">
+          <label>Via</label>
+          <input type="text" id="fIndirizzo">
+        </div>
+        <div class="form-row">
+          <label>N. civico</label>
+          <input type="text" id="fCivico">
+        </div>
+        <div class="form-row">
+          <label>CAP</label>
+          <input type="text" id="fCAP" maxlength="5">
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-row">
+          <label>Città</label>
+          <input type="text" id="fCitta">
+        </div>
+        <div class="form-row">
+          <label>Provincia</label>
+          <input type="text" id="fProvincia" maxlength="2" style="text-transform:uppercase" placeholder="RM">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label>Note</label>
+        <textarea id="fNote" placeholder="Note libere sul cliente"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" onclick="closeModal()">Annulla</button>
+        <button type="submit" class="btn btn-primary">Salva</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--ivory-dim)">CARICAMENTO…</div>
+</div>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const SUPABASE_URL = 'https://dlswafwbliqabozeuapv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FpMAG0z69Exc9KQZp4m3Qw_JhYlqIC0';
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+window.sb = sb;
+
+const $ = id => document.getElementById(id);
+const showLoader = () => $('loader').classList.add('show');
+const hideLoader = () => $('loader').classList.remove('show');
+
+let allClienti = [];
+let currentFilter = 'tutti';
+
+async function loadClienti() {
+  showLoader();
+  try {
+    const { data, error } = await sb
+      .from('clienti_stats')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    allClienti = data || [];
+    renderList();
+  } catch (e) {
+    console.error(e);
+    $('listContainer').innerHTML = `<div class="empty-state"><div class="big">Errore di caricamento</div><div>${e.message || e}</div></div>`;
+  } finally {
+    hideLoader();
+  }
+}
+
+function renderList() {
+  const search = $('searchInput').value.trim().toLowerCase();
+  let items = allClienti.filter(c => {
+    if (currentFilter !== 'tutti' && c.tipo !== currentFilter) return false;
+    if (!search) return true;
+    const s = [
+      c.nome_display || '',
+      c.codice_identificativo || '',
+      c.cf_societa || '',
+      c.telefono || '',
+      c.email || '',
+      c.citta || ''
+    ].join(' ').toLowerCase();
+    return s.includes(search);
+  });
+
+  $('countLabel').textContent = items.length === 1 
+    ? '1 cliente' 
+    : `${items.length} clienti${currentFilter !== 'tutti' ? ' in elenco' : ''}`;
+
+  if (items.length === 0) {
+    $('listContainer').innerHTML = `
+      <div class="empty-state">
+        <div class="big">${search || currentFilter!=='tutti' ? 'Nessun risultato' : 'Nessun cliente ancora'}</div>
+        <div>${search || currentFilter!=='tutti' ? 'Prova a modificare la ricerca o i filtri' : 'Clicca su "Nuovo cliente" per iniziare'}</div>
+      </div>`;
+    return;
+  }
+
+  const html = items.map(c => {
+    const initials = getInitials(c);
+    const totalParcelle = (c.n_parcelle_dirette || 0) + (c.n_parcelle_via_cantiere || 0);
+    const nomeDisplay = c.nome_display || '—';
+    const badge = c.tipo === 'societa' 
+      ? '<span class="badge-tipo societa">Società</span>'
+      : '<span class="badge-tipo persona">Persona</span>';
+    const meta = [];
+    if (c.codice_identificativo) meta.push(`<span>${c.tipo === 'societa' ? 'P.IVA' : 'CF'}: ${c.codice_identificativo}</span>`);
+    if (c.telefono) meta.push(`<span>☏ ${c.telefono}</span>`);
+    if (c.citta) meta.push(`<span>◉ ${c.citta}${c.provincia ? ' ('+c.provincia+')' : ''}</span>`);
+    return `
+      <a href="cliente-dettaglio.html?id=${c.id}" class="cliente-card">
+        <div class="cliente-avatar">${initials}</div>
+        <div class="cliente-info">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <div class="cliente-nome">${escape(nomeDisplay)}</div>
+            ${badge}
+          </div>
+          <div class="cliente-meta">${meta.join('')}</div>
+        </div>
+        <div class="cliente-stats">
+          <div class="stat-box">
+            <div class="stat-num">${c.n_cantieri || 0}</div>
+            <div class="stat-label">Cantieri</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">${totalParcelle}</div>
+            <div class="stat-label">Parcelle</div>
+          </div>
+        </div>
+      </a>`;
+  }).join('');
+
+  $('listContainer').innerHTML = `<div class="clienti-list">${html}</div>`;
+}
+
+function getInitials(c) {
+  if (c.tipo === 'societa') {
+    const rs = c.ragione_sociale || '';
+    const parts = rs.trim().split(/\s+/).filter(Boolean);
+    return (parts[0]?.[0] || '·').toUpperCase();
+  }
+  const n = (c.nome||'')[0] || '';
+  const cg = (c.cognome||'')[0] || '';
+  return (n+cg).toUpperCase() || '·';
+}
+
+function escape(s) {
+  return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+window.filterList = renderList;
+window.setFilter = (f) => {
+  currentFilter = f;
+  document.querySelectorAll('.chip').forEach(ch => ch.classList.toggle('active', ch.dataset.filter === f));
+  renderList();
+};
+
+window.openNewCliente = () => {
+  // reset form
+  $('clienteForm').reset();
+  $('tipoPersona').checked = true;
+  switchTipo();
+  $('modalTitle').innerHTML = 'Nuovo <em>cliente</em>';
+  $('modalSub').textContent = 'Inserisci i dati anagrafici';
+  $('modalBackdrop').classList.add('show');
+};
+
+window.closeModal = () => $('modalBackdrop').classList.remove('show');
+window.closeModalOnBackdrop = (e) => { if (e.target === $('modalBackdrop')) closeModal(); };
+
+window.switchTipo = () => {
+  const tipo = document.querySelector('input[name=tipo]:checked').value;
+  $('formPersona').style.display = tipo === 'persona' ? 'block' : 'none';
+  $('formSocieta').style.display = tipo === 'societa' ? 'block' : 'none';
+  $('titoloIndirizzo').textContent = tipo === 'societa' ? 'Sede legale' : 'Indirizzo';
+};
+
+window.saveCliente = async (e) => {
+  e.preventDefault();
+  const tipo = document.querySelector('input[name=tipo]:checked').value;
+
+  // validazione minima
+  if (tipo === 'persona') {
+    if (!$('fNome').value.trim() || !$('fCognome').value.trim() || !$('fCFPersona').value.trim()) {
+      alert('Nome, cognome e codice fiscale sono obbligatori.');
+      return;
+    }
+  } else {
+    if (!$('fRagSoc').value.trim() || !$('fPIVA').value.trim()) {
+      alert('Ragione sociale e Partita IVA sono obbligatori.');
+      return;
+    }
+  }
+
+  const payload = {
+    tipo,
+    telefono: $('fTel').value.trim() || null,
+    email: $('fEmail').value.trim() || null,
+    indirizzo: $('fIndirizzo').value.trim() || null,
+    civico: $('fCivico').value.trim() || null,
+    citta: $('fCitta').value.trim() || null,
+    cap: $('fCAP').value.trim() || null,
+    provincia: $('fProvincia').value.trim().toUpperCase() || null,
+    note: $('fNote').value.trim() || null,
+  };
+
+  if (tipo === 'persona') {
+    payload.nome = $('fNome').value.trim();
+    payload.cognome = $('fCognome').value.trim();
+    payload.data_nascita = $('fDataNascita').value || null;
+    payload.luogo_nascita = $('fLuogoNascita').value.trim() || null;
+    payload.codice_identificativo = $('fCFPersona').value.trim().toUpperCase();
+  } else {
+    payload.ragione_sociale = $('fRagSoc').value.trim();
+    payload.forma_giuridica = $('fFormaGiu').value || null;
+    payload.codice_identificativo = $('fPIVA').value.trim();
+    payload.cf_societa = $('fCFSocieta').value.trim().toUpperCase() || null;
+    payload.codice_sdi = $('fCodSDI').value.trim().toUpperCase() || null;
+    payload.pec = $('fPEC').value.trim() || null;
+  }
+
+  showLoader();
+  try {
+    const { data, error } = await sb.from('clienti').insert(payload).select().single();
+    if (error) throw error;
+    closeModal();
+    // vai direttamente al dettaglio del nuovo cliente
+    window.location.href = `cliente-dettaglio.html?id=${data.id}`;
+  } catch (e) {
+    alert('Errore nel salvataggio: ' + (e.message || e));
+    console.error(e);
+  } finally {
+    hideLoader();
+  }
+};
+
+// init
+loadClienti();
+</script>
+</body>
+</html>
